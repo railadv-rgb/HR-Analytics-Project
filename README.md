@@ -1,11 +1,13 @@
 # HR-Analytics-Project
 HR Analytics: The 2025 "Burnout" Crisis & 2026 Strategic Recovery
+
 📌 Project Overview
 This project is a simulated business case based on a corporate crisis. 
 In 2025, the company hit a record high attrition rate (83 separations). 
 My mission was to identify the causes and track the success of the 2026 "Win-Back" mission to rehire ex-employees.
 
 🏗️ The Data Architecture (Moving beyond Kaggle)
+
 I took the baseline Kaggle HR Dataset and re-engineered it to reflect a real-world relational database:
 
 Relational Structure: Split the flat data into 4 tables: employees, departments, salaries, and pm_engagement.
@@ -15,6 +17,7 @@ Custom Logic: I manually injected Hire Dates, Termination Dates, and Manager IDs
 Data Cleaning: Handled erroneous data fields by standardizing status labels and calculating consistent tenure metrics.
 
 🔍 Key Findings (The 2025 Diagnosis)
+
 Using 15 targeted SQL queries, I identified the root causes behind the 2025 attrition trend:
 
 The Overtime Tax: Data showed a massive "Satisfaction Gap." Employees working overtime had significantly lower Work-Life Balance and Job Involvement scores.
@@ -24,6 +27,7 @@ The Commute Burden: Attrition spiked for anyone living 50km+ from the office, re
 The Leadership Leak: I mapped the gender ratio by job level, and identified where the leadership pipeline was thinning out.
 
 📈 The 2026 Recovery: "Boomerang" endeavour
+
 Following the 2025 audit, stakeholders launched a mission to recover lost talent.
 
 The 120-Day Rule: I built a custom "Boomerang Audit" to track employees who returned to the company after at least a 4-month gap.
