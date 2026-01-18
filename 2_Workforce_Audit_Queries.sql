@@ -1,9 +1,4 @@
-/* PROJECT: Workforce Audit Scenario - The 2025 Crisis & 2026 Boomerang Mission
-SOURCE: Modified Kaggle HR Dataset (Re-architected into 4 Relational Tables)
-OBJECTIVE: Identify root causes of 2025 attrition and track "Win-Back" success.
-*/
-
-USE hr_analytics_scenario;
+USE hr;
 
 -- Q1: 2025 Workforce Pulse (The High-Level Baseline)
 SELECT 
@@ -188,4 +183,5 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
