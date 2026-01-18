@@ -175,7 +175,7 @@ GROUP BY distance_bracket ORDER BY attrition_pct DESC;
 -- Q15: The Boomerang Recovery Audit (Strategic Rehires)
 SELECT 
     e1.SSN, e1.first_name, e1.last_name, 
-    e1.termination_date AS exit_2025, 
+    e1.termination_date AS exit_date, 
     e2.hiredate AS rehire_2026,
     DATEDIFF(e2.hiredate, e1.termination_date) AS days_away
 FROM employees e1
@@ -183,5 +183,6 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
 
