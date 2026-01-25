@@ -3,7 +3,7 @@ HR Analytics: The 2025 "Burnout" Crisis & 2026 Strategic Recovery
 
 📌 Project Overview
 This project is a simulated business case based on a corporate crisis. 
-In 2025, the company hit a record high attrition rate (83 separations). 
+In 2025, the company hit a record high attrition rate (85 separations). 
 My mission was to identify the causes and track the success of the 2026 "Win-Back" mission to rehire ex-employees.
 
 🏗️ The Data Architecture (Moving beyond Kaggle)
