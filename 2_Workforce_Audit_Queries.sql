@@ -87,7 +87,19 @@ SELECT l.left_count AS separations, p.start_count, e.end_count,
     ROUND((l.left_count / ((p.start_count + e.end_count) / 2)) * 100, 2) AS attrition_rate_percent
 FROM period_data p JOIN leavers l ON 1=1 JOIN end_data e ON 1=1;
 
--- Q8: Yearly Turnover Trend (2024 vs. 2025)
+-- Q8: Monthly Termination Seasonality (2025 Trend Analysis)
+SELECT 
+    MONTH(termination_date) AS month_num,
+    MONTHNAME(termination_date) AS termination_month,
+    COUNT(emp_id) AS total_terminations,
+    SUM(COUNT(emp_id)) OVER (ORDER BY MONTH(termination_date)) AS cumulative_terminations
+FROM employees
+WHERE termination_date BETWEEN "2025-01-01" AND "2025-12-31"
+AND status = "inactive"
+GROUP BY month_num, termination_month
+ORDER BY month_num ASC;
+
+-- Q9: Yearly Turnover Trend (2024 vs. 2025)
 SELECT 
     d.department_name,
     SUM(CASE WHEN YEAR(e.termination_date) = 2024 THEN 1 ELSE 0 END) AS leavers_2024,
@@ -98,7 +110,7 @@ FROM employees e
 JOIN departments d ON e.dept_id = d.dept_id
 GROUP BY d.department_name;
 
--- Q9: Burnout Risk: Overtime vs. Satisfaction Gaps
+-- Q10: Burnout Risk: Overtime vs. Satisfaction Gaps
 SELECT 
     e.jobrole, e.joblevel,
     ROUND(AVG(CASE WHEN s.overtime = 'N' THEN eg.worklifebalance END) - 
@@ -111,7 +123,7 @@ JOIN pm_engagement eg ON e.emp_id = eg.emp_id
 WHERE e.status = 'active' AND s.to_date = '9999-01-01'
 GROUP BY e.jobrole, e.joblevel ORDER BY WLB_Gap DESC;
 
--- Q10: Engagement Decay & Job Involvement Analysis
+-- Q11: Engagement Decay & Job Involvement Analysis
 SELECT 
     e.jobrole,
     ROUND(AVG(CASE WHEN s.overtime = 'N' THEN eg.jobinvolvement END) - 
@@ -122,7 +134,7 @@ JOIN pm_engagement eg ON e.emp_id = eg.emp_id
 WHERE e.status = 'active' AND s.to_date = '9999-01-01'
 GROUP BY e.jobrole ORDER BY JINV_Gap DESC;
 
--- Q11: Gender Distribution by Leadership Level (Pipeline Audit)
+-- Q12: Gender Distribution by Leadership Level (Pipeline Audit)
 SELECT 
     joblevel, COUNT(*) as HCPerLevel,
     ROUND(COUNT(CASE WHEN gender = 'M' THEN 1 END) * 100.0 / COUNT(*), 2) AS Male_Pct,
@@ -130,7 +142,7 @@ SELECT
 FROM employees WHERE status = "active"
 GROUP BY joblevel ORDER BY joblevel;
 
--- Q12: Executive Summary Master View
+-- Q13: Executive Summary Master View
 SELECT 
     d.department_name,
     COUNT(CASE WHEN LOWER(TRIM(e.status)) = 'active' THEN 1 END) AS current_headcount,
@@ -141,7 +153,7 @@ LEFT JOIN departments d ON e.dept_id = d.dept_id
 LEFT JOIN salaries s ON e.emp_id = s.emp_id
 GROUP BY d.department_name;
 
--- Q13: Performance-Salary Audit (Meritocracy Check)
+-- Q14: Performance-Salary Audit (Meritocracy Check)
 CREATE OR REPLACE VIEW Performance_Salary_Audit AS
 SELECT 
     d.department_name,
@@ -157,7 +169,7 @@ JOIN salaries s ON e.emp_id = s.emp_id
 WHERE e.status = 'active' AND s.to_date = '9999-01-01'
 GROUP BY d.department_name;
 
--- Q14: Commute Burden & Retention Impact (Geography Analysis)
+-- Q15: Commute Burden & Retention Impact (Geography Analysis)
 SELECT 
     CASE 
         WHEN distancefromhome <= 20 THEN 'Short (10-20 KM)'
@@ -172,7 +184,7 @@ FROM employees e
 LEFT JOIN pm_engagement eg ON e.emp_id = eg.emp_id
 GROUP BY distance_bracket ORDER BY attrition_pct DESC;
 
--- Q15: The Boomerang Recovery Audit (Strategic Rehires)
+-- Q16: The Boomerang Recovery Audit (Strategic Rehires)
 SELECT 
     e1.SSN, e1.first_name, e1.last_name, 
     e1.termination_date AS exit_date, 
@@ -183,6 +195,7 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
 
 
