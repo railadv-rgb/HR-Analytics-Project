@@ -1,13 +1,24 @@
 USE hr;
 
+
 -- Q1: 2025 Workforce Pulse (The High-Level Baseline)
+
 SELECT 
-    COUNT(CASE WHEN status = 'active' AND YEAR(hiredate) <= "2025" THEN 1 END) AS 2025_HC,
-    ROUND(AVG(DATEDIFF("2025-12-31", birthdate)/365),0) AS AVG_Age,
-    ROUND(AVG(DATEDIFF("2025-12-31", hiredate)/365),1) AS AVG_Tenure,
-    ROUND(COUNT(CASE WHEN gender = 'F' AND status = "active" AND YEAR(hiredate) <= "2025" THEN 1 END)/count(gender)*100,2) AS Female_percent,
-    COUNT(CASE WHEN status = 'inactive' AND YEAR(termination_date) = "2025" THEN 1 END) AS 2025_Separations,
-    COUNT(CASE WHEN status = 'active' AND YEAR(hiredate) = "2025" THEN 1 END) AS 2025_new_hires
+    COUNT(CASE 
+        WHEN status = 'active' AND YEAR(hiredate) <= 2025 THEN 1 
+    END) AS 2025_HC,
+    ROUND(AVG(DATEDIFF('2025-12-31', birthdate) / 365), 0) AS AVG_Age,
+    ROUND(AVG(DATEDIFF('2025-12-31', hiredate) / 365), 1) AS AVG_Tenure,
+    ROUND(
+        COUNT(CASE WHEN gender = 'F' AND status = 'active' AND YEAR(hiredate) <= 2025 THEN 1 END) / 
+        COUNT(CASE WHEN status = 'active' AND YEAR(hiredate) <= 2025 THEN 1 END) * 100, 
+    2) AS Female_percent,
+    COUNT(CASE 
+        WHEN status = 'inactive' AND YEAR(termination_date) = 2025 THEN 1 
+    END) AS 2025_Seperations,
+    COUNT(CASE 
+        WHEN status = 'active' AND YEAR(hiredate) = 2025 THEN 1 
+    END) AS 2025_new_hires
 FROM employees;
 
 -- Q2: Departmental Talent Distribution & Institutional Knowledge
@@ -195,6 +206,7 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
 
 
