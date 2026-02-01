@@ -18,7 +18,7 @@ Data Cleaning: Handled erroneous data fields by standardizing status labels and 
 
 🔍 Key Findings (The 2025 Diagnosis)
 
-Using 16 targeted SQL queries, I identified the root causes behind the 2025 attrition trend:
+Using a series of targeted SQL queries, I identified the root causes behind the 2025 attrition trend:
 
 The Overtime Tax: Data showed a massive "Satisfaction Gap." Employees working overtime had significantly lower Work-Life Balance and Job Involvement scores.
 
