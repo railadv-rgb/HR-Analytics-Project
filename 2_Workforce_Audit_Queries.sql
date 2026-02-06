@@ -156,7 +156,7 @@ GROUP BY joblevel ORDER BY joblevel;
 -- Q13: Executive Summary Master View
 SELECT 
     d.department_name,
-    COUNT(CASE WHEN LOWER(TRIM(e.status)) = 'active' THEN 1 END) AS current_headcount,
+    COUNT(CASE WHEN e.status = 'active' THEN 1 END) AS current_headcount,
     ROUND(AVG(CASE WHEN s.to_date = '9999-01-01' THEN s.salary END), 0) AS avg_salary,
     ROUND(COUNT(CASE WHEN LOWER(TRIM(e.status)) = 'inactive' THEN 1 END) * 100.0 / COUNT(e.emp_id), 2) AS turnover_rate_pct
 FROM employees e
@@ -191,7 +191,7 @@ SELECT
         ELSE 'Extreme (91-120 KM)'
     END AS distance_bracket,
     COUNT(e.emp_id) AS total_employees,
-    ROUND(COUNT(CASE WHEN LOWER(TRIM(e.status)) = 'inactive' THEN 1 END) * 100.0 / COUNT(e.emp_id), 2) AS attrition_pct,
+    ROUND(COUNT(CASE WHEN e.status = 'inactive' THEN 1 END) * 100.0 / COUNT(e.emp_id), 2) AS attrition_pct,
     ROUND(AVG(eg.jobsatisfaction), 2) as avg_satisfaction 
 FROM employees e
 LEFT JOIN pm_engagement eg ON e.emp_id = eg.emp_id
@@ -208,6 +208,7 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
 
 
