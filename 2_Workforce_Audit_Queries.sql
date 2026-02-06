@@ -169,16 +169,18 @@ CREATE OR REPLACE VIEW Performance_Salary_Audit AS
 SELECT 
     d.department_name,
     ROUND(AVG(eg.performancerating), 2) AS avg_dept_rating,
-    ROUND(AVG(CASE WHEN eg.performancerating = 4 THEN s.salary END), 0) AS avg_salary_top_perf,
-    ROUND(AVG(CASE WHEN eg.performancerating = 3 THEN s.salary END), 0) AS avg_salary_std_perf,
-    ROUND((AVG(CASE WHEN eg.performancerating = 4 THEN s.salary END) - 
-           AVG(CASE WHEN eg.performancerating = 3 THEN s.salary END)), 0) AS perf_pay_gap
+    ROUND(AVG(CASE WHEN eg.performancerating >= 4 THEN s.salary END), 0) AS avg_salary_high_perf,
+    -- Average Salary for Low Performers (1 & 2)
+    ROUND(AVG(CASE WHEN eg.performancerating <= 2 THEN s.salary END), 0) AS avg_salary_low_perf,
+    ROUND((AVG(CASE WHEN eg.performancerating >= 4 THEN s.salary END) - 
+           AVG(CASE WHEN eg.performancerating <= 2 THEN s.salary END)), 0) AS merit_gap
 FROM departments d
 JOIN employees e ON d.dept_id = e.dept_id
 JOIN pm_engagement eg ON e.emp_id = eg.emp_id
 JOIN salaries s ON e.emp_id = s.emp_id
 WHERE e.status = 'active' AND s.to_date = '9999-01-01'
-GROUP BY d.department_name;
+GROUP BY d.department_name
+ORDER BY merit_gap DESC;
 
 -- Q15: Commute Burden & Retention Impact (Geography Analysis)
 SELECT 
@@ -206,6 +208,7 @@ JOIN employees e2 ON e1.SSN = e2.SSN
 WHERE e1.termination_date IS NOT NULL 
   AND e2.termination_date IS NULL
   AND DATEDIFF(e2.hiredate, e1.termination_date) >= 120;
+
 
 
 
